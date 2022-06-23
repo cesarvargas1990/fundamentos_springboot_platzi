@@ -39,5 +39,7 @@ public class FundamentosApplication implements CommandLineRunner {
 		System.out.println(myCustomRepository.getData());
 		System.out.println(myCustomRepositoryWserviceFake.getDataFromService());
 		myBean.print();
+		System.out.println("ejemplo aplcando sobrecarga de metodo...");
+		System.out.println(myCustomRepositoryWserviceFake.getDataFromService(1));
 	}
 }
