@@ -6,6 +6,7 @@ import com.fundamentosplatzi.springboot.fundamentos.bean.MyBeanWithDependency;
 import com.fundamentosplatzi.springboot.fundamentos.bean.MyBeanWithDependencyImplement;
 import com.fundamentosplatzi.springboot.fundamentos.bean.MyOperation;
 import com.fundamentosplatzi.springboot.fundamentos.bean.MyOperationImpl;
+import com.fundamentosplatzi.springboot.fundamentos.repository.MyCustomRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,8 +21,8 @@ public class MyConfigurationBean {
         return new MyOperationImpl();
     }
     @Bean
-    public MyBeanWithDependency myOperation(MyOperation myOperation) {
-        return new MyBeanWithDependencyImplement(myOperation);
+    public MyBeanWithDependency myOperation(MyOperation myOperation, MyCustomRepository myCustomRepository) {
+        return new MyBeanWithDependencyImplement(myOperation,myCustomRepository);
     }
 
 }
