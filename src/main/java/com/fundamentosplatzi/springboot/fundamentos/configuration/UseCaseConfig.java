@@ -7,6 +7,8 @@ import com.fundamentosplatzi.springboot.fundamentos.usecase.DeleteUserUseCase;
 import com.fundamentosplatzi.springboot.fundamentos.usecase.DeleteUserUseCaseImpl;
 import com.fundamentosplatzi.springboot.fundamentos.usecase.GetUser;
 import com.fundamentosplatzi.springboot.fundamentos.usecase.GetUserImpl;
+import com.fundamentosplatzi.springboot.fundamentos.usecase.PageableUserImplUseCase;
+import com.fundamentosplatzi.springboot.fundamentos.usecase.PageableUserUseCase;
 import com.fundamentosplatzi.springboot.fundamentos.usecase.UpdateUseCase;
 import com.fundamentosplatzi.springboot.fundamentos.usecase.UpdateUseCaseImpl;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +31,10 @@ public class UseCaseConfig {
     @Bean
     DeleteUserUseCase deleteUserUseCase (UserService userService) {
         return new DeleteUserUseCaseImpl(userService);
+    }
+    @Bean
+    PageableUserUseCase pageableUserUseCase (UserService userService) {
+        return new PageableUserImplUseCase(userService);
     }
 
 }
