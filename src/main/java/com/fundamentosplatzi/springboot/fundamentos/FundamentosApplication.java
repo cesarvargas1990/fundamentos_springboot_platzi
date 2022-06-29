@@ -9,6 +9,7 @@ import com.fundamentosplatzi.springboot.fundamentos.pojo.UserPojo;
 import com.fundamentosplatzi.springboot.fundamentos.repository.MyCustomRepository;
 import com.fundamentosplatzi.springboot.fundamentos.repository.MyCustomRepositoryWserviceFake;
 import com.fundamentosplatzi.springboot.fundamentos.repository.UserRepository;
+import com.fundamentosplatzi.springboot.fundamentos.service.UserService;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.aspectj.apache.bcel.Repository;
@@ -35,6 +36,7 @@ public class FundamentosApplication implements CommandLineRunner {
 	private MyBeanWithProperties myBeanWithProperties;
 	private UserPojo userPojo;
 	private UserRepository userRepository;
+	private UserService userService;
 	public FundamentosApplication(@Qualifier("componentTwoImplement") ComponentDependency componentDependency,
 								  MyBean myBean,
 								  MyBeanWithDependency myBeanWithDependency,
@@ -42,7 +44,8 @@ public class FundamentosApplication implements CommandLineRunner {
 								  MyCustomRepositoryWserviceFake myCustomRepositoryWserviceFake,
 								  MyBeanWithProperties myBeanWithProperties,
 								  UserPojo userPojo,
-								  UserRepository userRepository
+								  UserRepository userRepository,
+								  UserService userService
 	) {
 		this.componentDependency = componentDependency;
 		this.myBean = myBean;
@@ -52,6 +55,7 @@ public class FundamentosApplication implements CommandLineRunner {
 		this.myBeanWithProperties = myBeanWithProperties;
 		this.userPojo = userPojo;
 		this.userRepository = userRepository;
+		this.userService = userService;
 	}
 	public static void main(String[] args) {
 		SpringApplication.run(FundamentosApplication.class, args);
@@ -62,6 +66,8 @@ public class FundamentosApplication implements CommandLineRunner {
 			ejemplosAnteriores();
 			saveUsersInDatabase();
 			getInformationFromUser();
+			saveWithTransaction();
+			saveWithNoTransaction();
 	}
 
 	public void ejemplosAnteriores () {
@@ -88,6 +94,43 @@ public class FundamentosApplication implements CommandLineRunner {
 		}
 	}
 
+	private void saveWithTransaction () {
+		User test1 = new User("TestTransactional1", "email1@email.com",LocalDate.now());
+		User test2 = new User("TestTransactional2", "email2@email.com",LocalDate.now());
+		User test3 = new User("TestTransactional3", "email3@email.com",LocalDate.now());
+		User test4 = new User("TestTransactional4", "email4@email.com",LocalDate.now());
+		User test5 = new User("TestTransactional5", "email4@email.com",LocalDate.now());
+		List<User> users =Arrays.asList(test1,test2,test3,test4,test5);
+		try {
+			userService.saveTransactional(users);
+		} catch (Exception e) {
+			LOGGER.error("Esto es un error"+e);
+		}
+
+		userService.getAllUsers()
+				.stream()
+				.forEach(user->LOGGER.info("metodo getAllUsers "+user));
+
+	}
+
+	private void saveWithNoTransaction () {
+		User test1 = new User("TestTransactional1", "email1@email.com",LocalDate.now());
+		User test2 = new User("TestTransactional2", "email2@email.com",LocalDate.now());
+		User test3 = new User("TestTransactional3", "email3@email.com",LocalDate.now());
+		User test4 = new User("TestTransactional4", "email4@email.com",LocalDate.now());
+		User test5 = new User("TestTransactional5", "email4@email.com",LocalDate.now());
+		List<User> users =Arrays.asList(test1,test2,test3,test4,test5);
+		try {
+			userService.saveNoTransactional(users);
+		} catch (Exception e) {
+			LOGGER.error("Esto es un error"+e);
+		}
+
+		userService.getAllUsers()
+				.stream()
+				.forEach(user->LOGGER.info("metodo getAllUsers "+user));
+
+	}
 	private void getInformationFromUser(){
 		LOGGER.info("user con metodo findByUserEmail"+
 				userRepository.findByUserEmail("cesara1.vargas1990@gmail.com")
